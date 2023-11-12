@@ -1,5 +1,5 @@
-from project_name.base import NAME
+from hiddify_tg_bot.base import NAME
 
 
 def test_base():
-    assert NAME == "project_name"
+    assert NAME == "hiddify_tg_bot"

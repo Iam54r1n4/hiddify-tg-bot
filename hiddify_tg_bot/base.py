@@ -1,17 +1,7 @@
-"""
-hiddify_tg_bot base module.
+from collections import namedtuple
 
-This is the principal module of the hiddify_tg_bot project.
-here you put your main classes and objects.
 
-Be creative! do whatever you want!
-
-If you want to replace this with a Flask application run:
-
-    $ make init
-
-and then choose `flask` as template.
-"""
-
-# example constant variable
 NAME = "hiddify_tg_bot"
+
+Check_UUID_Tuple = namedtuple('CheckUUIDResult','is_valid, is_admin')
+UserID_ChatID_Tuple = namedtuple('UserId_ChatId','user_id, chat_id')

@@ -1,5 +1,41 @@
-# This template is a low-dependency template. 
-# By default there is no requirements added here.
-# Add the requirements you need to this file.
-# or run `make init` to create this file automatically based on the template.
-# You can also run `make switch-to-poetry` to use the poetry package manager.
+black==23.11.0
+certifi==2023.7.22
+charset-normalizer==3.3.2
+click==8.1.7
+coverage==7.3.2
+exceptiongroup==1.1.3
+flake8==6.1.0
+ghp-import==2.1.0
+gitchangelog==3.0.4
+-e git+ssh://git@github.com/Iam54r1n4/hiddify-tg-bot.git@966bf35ce84acb550f0536d48c394ce04e92655d#egg=hiddify_tg_bot
+idna==3.4
+iniconfig==2.0.0
+isort==5.12.0
+Jinja2==3.1.2
+Markdown==3.5.1
+MarkupSafe==2.1.3
+mccabe==0.7.0
+mergedeep==1.3.4
+mkdocs==1.5.3
+mypy==1.7.0
+mypy-extensions==1.0.0
+packaging==23.2
+pathspec==0.11.2
+platformdirs==4.0.0
+pluggy==1.3.0
+pycodestyle==2.11.1
+pyflakes==3.1.0
+pyTelegramBotAPI==4.14.0
+pytest==7.4.3
+pytest-cov==4.1.0
+python-dateutil==2.8.2
+python-i18n==0.3.9
+PyYAML==6.0.1
+pyyaml_env_tag==0.1
+requests==2.31.0
+six==1.16.0
+telebot==0.0.5
+tomli==2.0.1
+typing_extensions==4.8.0
+urllib3==2.0.7
+watchdog==3.0.0

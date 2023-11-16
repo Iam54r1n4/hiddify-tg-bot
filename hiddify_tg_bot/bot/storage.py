@@ -1,4 +1,4 @@
-from hiddify_tg_bot.bot.state import StateRedisStorage
+from telebot.storage import StateRedisStorage
 import config
 
 class HiddifyStateRedisStorage(StateRedisStorage):
@@ -8,9 +8,6 @@ class HiddifyStateRedisStorage(StateRedisStorage):
     def get_user_lang(self,user_id,chat_id):
         self.get_data(chat_id,user_id)['lang']
         
-
-Redis_Storage = HiddifyStateRedisStorage(config.REDIS_URI)
-
 class BotUserData():
     def __init__(self,uuid,user_id,chat_id,lang,is_admin,storage:HiddifyStateRedisStorage) -> None:
         self.__storage = storage
@@ -23,9 +20,9 @@ class BotUserData():
     # add user data to storage
     def add(self):
         # get instance variables
-        variables = [var_name for var_name in self.__dict__.keys() if not var_name.startswith('__')]
+        variables = [var_name for var_name in self.__dict__.keys() if not var_name.startswith('_')]
         for var_name in variables:
-            self.__storage.set_data(self.chat_id,self.user_id,var_name,self.var)
+            self.__storage.set_data(self.chat_id,self.user_id,var_name,getattr(self,var_name))
     # remove user data from storage
     def remove(self):
         self.__storage.reset_data(self.chat_id,self.user_id)

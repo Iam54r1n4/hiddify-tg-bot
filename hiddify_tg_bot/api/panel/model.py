@@ -32,7 +32,7 @@ class User_Me(__APIModelABC):
         return User_Me(
             d['admin_message_html'], d['admin_message_url'], d['profile_remaining_days'], d['profile_reset_days'],
             d['profile_title'], d['profile_url'], d['profile_usage_current'], d['profile_usage_total'],
-            d['telegram_bot_url'], d['brand_title'], d['brand_icon_url'], d['doh'], d['def_lang']
+            d['telegram_bot_url'], d['brand_title'], d['brand_icon_url'], d['doh'], d['lang']
         )
 
 

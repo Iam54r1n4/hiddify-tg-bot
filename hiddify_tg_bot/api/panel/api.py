@@ -7,13 +7,10 @@ import config
 from api.panel import model
 class __API(ABC):
     
-    @property
-    @abstractmethod
-    def __session():
-        return requests.session()
+    _session = requests.session()
 
     @abstractmethod
-    def hiddify_url(self):
+    def build_api_url(self):
         pass
     @abstractmethod
     def me(self):
@@ -22,16 +19,26 @@ class __API(ABC):
 
 class PanelAdminAPI(__API):
     def __init__(self,admin_uuid) -> None:
+        self.root_domain = config.HIDDIFY_ROOT_DOMAIN.removesuffix('/')
+        self.proxy_path = config.HIDDIFY_PROXY_PATH.removesuffix('/')
         self.uuid = admin_uuid
 
-    def hiddify_url(self):
-        return f'{self.root_domain}/{self.proxy_path}/{self.uuid}/'
+        # skip ssl verification (remove the line on production)
+        PanelUserAPI._session.verify = False
+
+    def build_api_url(self):
+        return f'{self.root_domain}/{self.proxy_path}/{self.uuid}/api/v2/admin/'
     
     def me(self) -> model.Admin_Me:
-        api_url = self.hiddify_url() + 'me/'
-        res = PanelUserAPI.__session.get(api_url).content.decode()
-        me = json.loads(res,object_hook= model.Admin_Me.from_dict)
-        return me
+        api_url = self.build_api_url() + 'me/'
+        try:
+            res = PanelUserAPI._session.get(api_url)
+            if res.status_code != 200:
+                return None
+            me = json.loads(res.content.decode(),object_hook= model.Admin_Me.from_dict)
+            return me
+        except:
+            return None
     
 class PanelUserAPI(__API):
     def __init__(self,uuid) -> None:
@@ -39,41 +46,63 @@ class PanelUserAPI(__API):
         self.proxy_path = config.HIDDIFY_PROXY_PATH.removesuffix('/')
         self.uuid  = uuid
         # skip ssl verification (remove the line on production)
-        PanelUserAPI.__session.verify = False
+        PanelUserAPI._session.verify = False
         
-    def hiddify_url(self):
-        return f'{self.root_domain}/{self.proxy_path}/{self.uuid}/'
+    def build_api_url(self):
+        return f'{self.root_domain}/{self.proxy_path}/{self.uuid}/api/v2/user/'
     
     def me(self) -> model.User_Me:
-        api_url = self.hiddify_url() + 'me/'
-        res = PanelUserAPI.__session.get(api_url).content.decode()
-        info = json.loads(res,object_hook = model.User_Me.from_dict)
-        return info
+        try:
+            api_url = self.build_api_url() + 'me/'
+            res = PanelUserAPI._session.get(api_url)
+            if res.status_code != 200:
+                return None
+            info = json.loads(res.content.decode(),object_hook = model.User_Me.from_dict)
+            return info
+        except:
+            return None
 
     def short(self) -> str:
-        api_url = self.hiddify_url() + 'short/'
-        res = PanelUserAPI.__session.get(api_url).content.decode()
-        return json.loads(res)['short']
+        try:
+            api_url = self.build_api_url() + 'short/'
+            res = PanelUserAPI._session.get(api_url)
+            if res.status_code != 200:
+                return None
+            return json.loads(res.content.decode())['short']
+        except:
+            return None
     
     def mtproxies(self) -> List[model.User_Mtproto]:
-        api_url = self.hiddify_url() + 'mtproxies/'
-        res = PanelUserAPI.__session.get(api_url).content.decode()
-        mtprotos_json = json.loads(res)
-        mtprotos = []
-        for item in mtprotos_json:
-            mtproto = json.loads(json.dumps(item), object_hook=model.User_Mtproto.from_dict)
-            mtprotos.append(mtproto)
+        try:
+            api_url = self.build_api_url() + 'mtproxies/'
+            res = PanelUserAPI._session.get(api_url)
+            if res.status_code != 200:
+                return None
+            mtprotos_json = json.loads(res.content.decode())
+            mtprotos = []
+            for item in mtprotos_json:
+                mtproto = json.loads(json.dumps(item), object_hook=model.User_Mtproto.from_dict)
+                mtprotos.append(mtproto)
 
-        return mtprotos
+            return mtprotos
+
+        except:
+            return None
 
 
     def all_configs(self) -> List[model.User_Config]:
-        api_url = self.hiddify_url() + 'all-configs/'
-        res = PanelUserAPI.__session.get(api_url).content.decode()
-        configs_json = json.loads(res)
-        configs = []
-        for item in configs_json:
-            conf = json.loads(json.dumps(item), object_hook=model.User_Config.from_dict)
-            configs.append(conf)
+        try:
+            api_url = self.build_api_url() + 'all-configs/'
+            res = PanelUserAPI._session.get(api_url)
+            if res.status_code != 200:
+                return None
+            configs_json = json.loads(res.content.decode())
+            configs = []
+            for item in configs_json:
+                conf = json.loads(json.dumps(item), object_hook=model.User_Config.from_dict)
+                configs.append(conf)
 
-        return configs
+            return configs
+
+        except:
+            return None

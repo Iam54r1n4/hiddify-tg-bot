@@ -7,7 +7,7 @@ Be creative! do whatever you want!
 - Start a web application
 - Import things from your .base module
 """
-from bot import bot
+from bot import BOT,run
 
 
 def main():  # pragma: no cover
@@ -27,6 +27,7 @@ def main():  # pragma: no cover
         * Run an application (Flask, FastAPI, Django, etc.)
     """
 
-    bot.run()
+    print(f'Handling {BOT.get_me().username} bot')
+    run()
 
 main()
